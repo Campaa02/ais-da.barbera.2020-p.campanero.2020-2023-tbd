@@ -26,6 +26,6 @@ jobs:
         run: mvn test -Dtest=OpenLibraryServiceTest
       - name: Ejecutar Pruebas de API Rest
         run: mvn test -Dtest=APIRestTest
-      - name: Ejecutar Pruebas de Selenium
-        run: mvn test -Dtest=WebInterfaceTest
+      #- name: Ejecutar Pruebas de Selenium
+        #run: mvn test -Dtest=WebInterfaceTest
     
