@@ -1,8 +1,10 @@
 name: Run tests and push build to Okteto
 
 on:
-  push:
-    branches:
+  pull_request:
+     types:
+     - closed
+     branches:
       - release-*
       
 jobs:
