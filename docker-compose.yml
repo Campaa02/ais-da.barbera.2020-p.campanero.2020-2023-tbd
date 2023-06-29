@@ -1,0 +1,5 @@
+services:
+  books-reviewer-tbd:
+    image: pca06/books-reviewer:${VERSION}
+    ports:
+    - 8080:8080
