@@ -1,4 +1,4 @@
-name: Run tests and push build to Okteto
+name: Run all tests
 
 on:
   pull_request:
