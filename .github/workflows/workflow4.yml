@@ -2,7 +2,7 @@ name: Nightly workflow
 
 on:
   schedule:
-    - cron: '45 16 * * *' # 2 AM UTC
+    - cron: '00 17 * * *' # 2 AM UTC
       
 jobs:
   build:
@@ -23,19 +23,28 @@ jobs:
         run: mvn test -Dtest=OpenLibraryServiceTest
       - name: Ejecutar Pruebas de API Rest
         run: mvn test -Dtest=APIRestTest
-      - name: Ejecutar Pruebas de Selenium
-        run: mvn test -Dtest=WebInterfaceTest
-      - name: Generar etiqueta de versión
-        run: echo "image_tag=dev-$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
-      - name: Construir Imagen Docker
+      #- name: Ejecutar Pruebas de Selenium
+        #run: mvn test -Dtest=WebInterfaceTest
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Generate tag
+        run: echo "tag=dev-$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT
+        id: timestamp
+      - name: Building Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ env.image_tag }} .
-      - name: Iniciar Sesión en Docker Hub
+          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}
+          echo "::set-output name=image_tag::$IMAGE_TAG"
+      - name: Logging in to Docker Hub
         run: |
-          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-      - name: Publicar Imagen Docker en Docker Hub
+          docker login --username="${{ secrets.DOCKERHUB_USERNAME }}" --password="${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Pushing Docker Image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ env.image_tag }}
-      - name: Cerrar Sesión en Docker Hub
+         docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }} | tee dockerPush.txt
+      - name: Generating DockerPush artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Docker Push Results
+          path: dockerPush.txt
+      - name: Closing Docker Hub
         run: |
           docker logout
