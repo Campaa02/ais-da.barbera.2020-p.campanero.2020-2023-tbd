@@ -1,0 +1,41 @@
+name: Nightly workflow
+
+on:
+  schedule:
+    - cron: '45 16 * * *' # 2 AM UTC
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código Fuente
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Ejecutar Pruebas Unitarias
+        run: mvn test -Dtest=BookServiceTest
+      - name: Ejecutar Pruebas de Integración
+        run: mvn test -Dtest=OpenLibraryServiceTest
+      - name: Ejecutar Pruebas de API Rest
+        run: mvn test -Dtest=APIRestTest
+      - name: Ejecutar Pruebas de Selenium
+        run: mvn test -Dtest=WebInterfaceTest
+      - name: Generar etiqueta de versión
+        run: echo "image_tag=dev-$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
+      - name: Construir Imagen Docker
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ env.image_tag }} .
+      - name: Iniciar Sesión en Docker Hub
+        run: |
+          echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      - name: Publicar Imagen Docker en Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ env.image_tag }}
+      - name: Cerrar Sesión en Docker Hub
+        run: |
+          docker logout
