@@ -1,0 +1,5 @@
+services:
+  books-reviewer:
+    image: pca06/books-reviewer:0.2.0-SNAPSHOT
+    ports: 
+      - 8080:8080
