@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Ejecutar Pruebas Unitarias
-        run: mvn test -Dtest=UnitTestSuite
+        run: mvn test -Dtest=BookServiceTest
       - name: Ejecutar Pruebas de Integración
-        run: mvn test -Dtest=IntegrationTestSuite
+        run: mvn test -Dtest=OpenLibraryServiceTest
 
