@@ -18,33 +18,37 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Ejecutar Pruebas Unitarias
-        run: mvn test -Dtest=BookServiceTest
+        run: mvn test -Dtest=BookServiceUnitTests
       - name: Ejecutar Pruebas de Integración
-        run: mvn test -Dtest=OpenLibraryServiceTest
+        run: mvn test -Dtest=OpenLibraryServiceIntegrationTests
       - name: Ejecutar Pruebas de API Rest
-        run: mvn test -Dtest=APIRestTest
-      #- name: Ejecutar Pruebas de Selenium
-        #run: mvn test -Dtest=WebInterfaceTest
+        run: mvn test -Dtest=RestAssuredE2ETests
+      - name: Ejecutar Pruebas de Selenium
+        run: mvn test -Dtest=SeleniumE2ETests
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Generate tag
         run: echo "tag=dev-$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT
         id: timestamp
       - name: Building Docker Image
+        id: build-image
         run: |
           mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}
-          echo "::set-output name=image_tag::$IMAGE_TAG"
+          echo "image_tag=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}" >> $GITHUB_OUTPUT
       - name: Logging in to Docker Hub
         run: |
           docker login --username="${{ secrets.DOCKERHUB_USERNAME }}" --password="${{ secrets.DOCKERHUB_TOKEN }}"
       - name: Pushing Docker Image
         run: |
-         docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }} | tee dockerPush.txt
-      - name: Generating DockerPush artifact
+         docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}
+      - name: Save Docker image as artifact
+        run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
+      - name: Upload Docker image
         uses: actions/upload-artifact@v3
         with:
-          name: Docker Push Results
-          path: dockerPush.txt
+          name: ${{ steps.build-image.outputs.image_tag }}
+          path: image.tar
+          retention-days: 1
       - name: Closing Docker Hub
         run: |
           docker logout

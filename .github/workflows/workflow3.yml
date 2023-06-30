@@ -22,13 +22,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Ejecutar Pruebas Unitarias
-        run: mvn test -Dtest=BookServiceTest
+        run: mvn test -Dtest=BookServiceUnitTests
       - name: Ejecutar Pruebas de Integración
-        run: mvn test -Dtest=OpenLibraryServiceTest
+        run: mvn test -Dtest=OpenLibraryServiceIntegrationTests
       - name: Ejecutar Pruebas de API Rest
-        run: mvn test -Dtest=APIRestTest
-      #- name: Ejecutar Pruebas de Selenium
-        #run: mvn test -Dtest=WebInterfaceTest
+        run: mvn test -Dtest=RestAssuredE2ETests
+      - name: Ejecutar Pruebas de Selenium
+        run: mvn test -Dtest=SeleniumE2ETests
       - name: Building Docker Image
         run: |
           mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
