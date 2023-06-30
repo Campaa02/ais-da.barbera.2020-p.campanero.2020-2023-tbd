@@ -1,16 +1,15 @@
 name: Run tests and push build to Okteto
 
 on:
-  pull_request:
-     types:
-     - closed
-     branches:
-      - release-*
+  create:
+  push:
+    branches:
+      - release-**
       
 jobs:
-  deployment-testing:
+  run_if:
+    if: startsWith(github.ref, 'release') 
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
       - name: Installing Okteto CLI
         run: |
@@ -30,19 +29,24 @@ jobs:
       - name: Ejecutar Pruebas de Selenium
         run: mvn test -Dtest=SeleniumE2ETests
       - name: Building Docker Image
+        id: build-image
         run: |
-          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
+          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ github.sha }}
+          echo "image-tag=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ github.sha }}" >> $GITHUB_OUTPUT
       - name: Logging into Docker Hub
         run: |
           docker login --username="${{ secrets.DOCKERHUB_USERNAME }}" --password="${{ secrets.DOCKERHUB_TOKEN }}"
       - name: Pushing Docker Image
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout) | tee dockerPush.txt
-      - name: Generating the DockerPush artifact
+      - name: Save Docker image as artifact
+        run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
+      - name: Upload Docker image
         uses: actions/upload-artifact@v3
         with:
-          name: DockerPush 
-          path: dockerPush.txt
+          name: ${{ steps.build-image.outputs.image_tag }}
+          path: image.tar
+          retention-days: 1
       - name: Closing Docker Hub
         run: |
           docker logout

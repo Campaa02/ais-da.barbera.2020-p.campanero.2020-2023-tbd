@@ -1,5 +1,5 @@
 services:
   books-reviewer-tbd:
-    image: maes95/books-reviewer:${VERSION}
+    image: pca06/books-reviewer:${VERSION}
     ports:
     - 8080:8080

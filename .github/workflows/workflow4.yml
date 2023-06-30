@@ -2,7 +2,7 @@ name: Nightly workflow
 
 on:
   schedule:
-    - cron: '20 18 * * *' # 2 AM UTC
+    - cron: '19 10 * * *' # 2 AM UTC
       
 jobs:
   build:
@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout Código Fuente
         uses: actions/checkout@v3
-        with:
-          ref: main
       - name: Configurar JDK 17
         uses: actions/setup-java@v3
         with:
