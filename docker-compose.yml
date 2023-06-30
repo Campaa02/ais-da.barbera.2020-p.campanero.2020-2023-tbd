@@ -1,5 +1,5 @@
 services:
-  books-reviewer:
-    image: pca06/books-reviewer:0.2.0-SNAPSHOT
-    ports: 
-      - 8080:8080
+books-reviewer-tbd:
+image: maes95/books-reviewer:${VERSION}
+ports:
+- 8080:8080
