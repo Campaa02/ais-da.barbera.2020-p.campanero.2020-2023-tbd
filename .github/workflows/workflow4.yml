@@ -2,7 +2,7 @@ name: Nightly workflow
 
 on:
   schedule:
-    - cron: '00 17 * * *' # 2 AM UTC
+    - cron: '20 18 * * *' # 2 AM UTC
       
 jobs:
   build:
