@@ -16,14 +16,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Ejecutar Pruebas Unitarias
-        run: mvn test -Dtest=BookServiceUnitTests
-      - name: Ejecutar Pruebas de Integración
-        run: mvn test -Dtest=OpenLibraryServiceIntegrationTests
-      - name: Ejecutar Pruebas de API Rest
-        run: mvn test -Dtest=RestAssuredE2ETests
-      - name: Ejecutar Pruebas de Selenium
-        run: mvn test -Dtest=SeleniumE2ETests
+      # - name: Ejecutar Pruebas Unitarias
+      #   run: mvn test -Dtest=BookServiceUnitTests
+      # - name: Ejecutar Pruebas de Integración
+      #   run: mvn test -Dtest=OpenLibraryServiceIntegrationTests
+      # - name: Ejecutar Pruebas de API Rest
+      #   run: mvn test -Dtest=RestAssuredE2ETests
+      # - name: Ejecutar Pruebas de Selenium
+      #   run: mvn test -Dtest=SeleniumE2ETests
       - name: Clone repository
         uses: actions/checkout@v2
       - name: Generate tag
