@@ -3,9 +3,12 @@ package es.codeurjc.ais.book;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import es.codeurjc.ais.review.Review;
 
-public class BookDetail extends Book{
+public class BookDetail extends Book {
 
     private String description;
 
@@ -15,12 +18,21 @@ public class BookDetail extends Book{
 
     private List<Review> reviews = new ArrayList<>();
 
+    private static final int MAX_DESCRIPTION_LENGTH = 950;
+
+    private static final Logger logger = LoggerFactory.getLogger(BookDetail.class);
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        if (description.length() > MAX_DESCRIPTION_LENGTH) {
+            logger.warn("Description too long, truncating...");
+            this.description = description.substring(0, MAX_DESCRIPTION_LENGTH) + "...";
+        } else {
+            this.description = description;
+        }
     }
 
     public String getImageUrl() {
@@ -39,7 +51,7 @@ public class BookDetail extends Book{
     public List<Review> getReviews() {
         return reviews;
     }
-    
+
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
     }
