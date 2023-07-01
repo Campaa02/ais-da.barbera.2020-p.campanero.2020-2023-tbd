@@ -2,7 +2,7 @@ name: Nightly workflow
 
 on:
   schedule:
-    - cron: '19 10 * * *' # 2 AM UTC
+    - cron: '00 00 * * *' # 2 AM UTC
   workflow_dispatch:
       
 jobs:
@@ -16,16 +16,14 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      # - name: Ejecutar Pruebas Unitarias
-      #   run: mvn test -Dtest=BookServiceUnitTests
-      # - name: Ejecutar Pruebas de Integración
-      #   run: mvn test -Dtest=OpenLibraryServiceIntegrationTests
-      # - name: Ejecutar Pruebas de API Rest
-      #   run: mvn test -Dtest=RestAssuredE2ETests
-      # - name: Ejecutar Pruebas de Selenium
-      #   run: mvn test -Dtest=SeleniumE2ETests
-      - name: Clone repository
-        uses: actions/checkout@v2
+      - name: Ejecutar Pruebas Unitarias
+        run: mvn test -Dtest=BookServiceUnitTests
+      - name: Ejecutar Pruebas de Integración
+        run: mvn test -Dtest=OpenLibraryServiceIntegrationTests
+      - name: Ejecutar Pruebas de API Rest
+        run: mvn test -Dtest=RestAssuredE2ETests
+      - name: Ejecutar Pruebas de Selenium
+        run: mvn test -Dtest=SeleniumE2ETests
       - name: Generate tag
         run: echo "tag=dev-$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT
         id: timestamp

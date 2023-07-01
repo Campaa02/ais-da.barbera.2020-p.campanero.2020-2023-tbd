@@ -2,7 +2,7 @@ name: Run all tests
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, reopened, ready_for_review]
     branches:
       - trunk
   workflow_dispatch:
