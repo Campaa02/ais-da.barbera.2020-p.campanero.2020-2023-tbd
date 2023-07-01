@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import java.util.HashMap;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,10 +25,12 @@ import io.restassured.RestAssured;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("The REST API")
 public class RestAssuredE2ETests {    
+    
+    @LocalServerPort private int port;
 
-    @BeforeAll
-    public static void setUp() {
-        RestAssured.basePath = System.getProperty("host");
+    @BeforeEach
+    public void setUp() {
+        RestAssured.port = this.port;  
     }
 
     @Test
