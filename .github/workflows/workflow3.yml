@@ -44,10 +44,14 @@ jobs:
           docker push ${{ steps.build-image.outputs.image_tag }}
       - name: Save Docker image as artifact
         run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
+      - name: Generate date timestamp
+        id: timestamp
+        run: |
+          echo "name=date::$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_OUTPUT
       - name: Upload Docker image
         uses: actions/upload-artifact@v3
         with:
-          name: $(date +'%Y%m%d.%H%M%S')
+          name: ${{ steps.timestamp.outputs.date }}
           path: image.tar
           retention-days: 1
       - name: Closing Docker Hub
