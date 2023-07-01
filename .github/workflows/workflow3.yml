@@ -29,6 +29,7 @@ jobs:
       #   run: mvn test -Dtest=RestAssuredE2ETests
       # - name: Ejecutar Pruebas de Selenium
       #   run: mvn test -Dtest=SeleniumE2ETests
+      
       - name: Building Docker Image
         id: build-image
         run: |
@@ -55,6 +56,7 @@ jobs:
       - name: Logging into Okteto
         run: |
           okteto context use https://cloud.okteto.com --token ${{ secrets.OKTETO_TOKEN }}
-      - name: Deploying to Okteto
+      - name: Deploy to Okteto
         run: |
-          okteto deploy --wait --build
+          export VERSION=${{ github.sha }}
+          okteto deploy --wait
