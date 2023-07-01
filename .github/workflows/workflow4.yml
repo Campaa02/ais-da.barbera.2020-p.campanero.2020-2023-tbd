@@ -32,14 +32,14 @@ jobs:
       - name: Building Docker Image
         id: build-image
         run: |
-          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}
+          mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=pca06/books-reviewer:${{ steps.timestamp.outputs.tag }}
           echo "::set-output name=image_tag::$IMAGE_TAG"
       - name: Logging in to Docker Hub
         run: |
-          docker login --username="${{ secrets.DOCKERHUB_USERNAME }}" --password="${{ secrets.DOCKERHUB_TOKEN }}"
+          docker login --username="pca06" --password="${{ secrets.DOCKERHUB_TOKEN }}"
       - name: Pushing Docker Image
         run: |
-         docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}
+         docker push pca06/books-reviewer:${{ steps.timestamp.outputs.tag }}
       - name: Save Docker image as artifact
         run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
       - name: Upload Docker image
