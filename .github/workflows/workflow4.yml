@@ -46,7 +46,7 @@ jobs:
       - name: Upload Docker image
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.build-image.outputs.image_tag }}
+          name: $(date +'%Y%m%d.%H%M%S')
           path: image.tar
           retention-days: 1
       - name: Closing Docker Hub
