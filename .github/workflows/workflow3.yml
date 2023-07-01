@@ -60,3 +60,6 @@ jobs:
         run: |
           export VERSION=${{ github.sha }}
           okteto deploy --wait
+      - name: Running Sanity Test
+        run: |
+          mvn -Dtest=SanityTest -Dhost="https://books-reviewer-tbd-campaa02.cloud.okteto.net/" test
