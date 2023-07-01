@@ -9,7 +9,7 @@ on:
       
 jobs:
   run_if:
-    if: startsWith(github.ref, 'release') 
+    if: startsWith(github.ref, 'refs/heads/release')
     runs-on: ubuntu-latest
     steps:
       - name: Installing Okteto CLI
@@ -41,13 +41,13 @@ jobs:
           docker login --username="${{ secrets.DOCKERHUB_USERNAME }}" --password="${{ secrets.DOCKERHUB_TOKEN }}"
       - name: Pushing Docker Image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.build-image.outputs.image_tag }}
+          docker push ${{ steps.build-image.outputs.image_tag }}
       - name: Save Docker image as artifact
         run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
       - name: Upload Docker image
         uses: actions/upload-artifact@v3
         with:
-          name: $(date +'%Y%m%d.%H%M%S')
+          name: image
           path: image.tar
           retention-days: 1
       - name: Closing Docker Hub
