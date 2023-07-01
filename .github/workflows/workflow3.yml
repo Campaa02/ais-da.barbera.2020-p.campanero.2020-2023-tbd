@@ -9,7 +9,7 @@ on:
       
 jobs:
   run_if:
-    if: startsWith(github.ref, 'release') 
+    if: startsWith(github.ref, 'refs/heads/release')
     runs-on: ubuntu-latest
     steps:
       - name: Installing Okteto CLI
