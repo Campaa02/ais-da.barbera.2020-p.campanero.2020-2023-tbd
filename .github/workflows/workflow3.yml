@@ -1,15 +1,13 @@
 name: Run tests and push build to Okteto
 
 on:
-  create:
   push:
     branches:
       - release-**
   workflow_dispatch:
       
 jobs:
-  run_if:
-    if: startsWith(github.ref, 'refs/heads/release')
+  deploy_to_okteto:
     runs-on: ubuntu-latest
     steps:
       - name: Installing Okteto CLI
@@ -42,8 +40,6 @@ jobs:
       - name: Pushing Docker Image
         run: |
           docker push ${{ steps.build-image.outputs.image_tag }}
-      - name: Save Docker image as artifact
-        run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
       - name: Closing Docker Hub
         run: |
           docker logout
