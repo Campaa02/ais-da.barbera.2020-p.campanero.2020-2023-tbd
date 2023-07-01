@@ -33,13 +33,13 @@ jobs:
         id: build-image
         run: |
           mvn spring-boot:build-image -DskipTests -Dspring-boot.build-image.imageName=${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ github.sha }}
-          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "::set-output name=image_tag::$IMAGE_TAG"
       - name: Logging into Docker Hub
         run: |
           docker login --username="${{ secrets.DOCKERHUB_USERNAME }}" --password="${{ secrets.DOCKERHUB_TOKEN }}"
       - name: Pushing Docker Image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout) | tee dockerPush.txt
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.build-image.outputs.image_tag }}
       - name: Save Docker image as artifact
         run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
       - name: Upload Docker image
