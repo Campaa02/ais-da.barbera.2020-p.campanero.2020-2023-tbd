@@ -3,6 +3,7 @@ name: Nightly workflow
 on:
   schedule:
     - cron: '19 10 * * *' # 2 AM UTC
+  workflow_dispatch:
       
 jobs:
   build:
