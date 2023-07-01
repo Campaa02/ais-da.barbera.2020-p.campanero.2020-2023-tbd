@@ -39,8 +39,6 @@ jobs:
       - name: Pushing Docker Image
         run: |
          docker push ${{ secrets.DOCKERHUB_USERNAME }}/books-reviewer:${{ steps.timestamp.outputs.tag }}
-      - name: Save Docker image as artifact
-        run: docker save --output image.tar ${{ steps.build-image.outputs.image_tag }}
       - name: Closing Docker Hub
         run: |
           docker logout
