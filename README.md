@@ -8,9 +8,9 @@ Autor(es): Daniel Andrés Barbera Dimoftache, Pablo Campanero Arévalo
 
 ![Captura de pantalla de la aplicación desplegada en Okteto, en el libro OL151411W](image.png)
 
-[Última imagen de Docker desplegada con el workflow nocturno](https://hub.docker.com/layers/pca06/books-reviewer/0802e390fc9d35cd3717ab330f4b0205b8e2e524/images/sha256-540edb20e80e61b48f4cc5c78ca26f1faf5409a5351d4e0e4c1ceba2e0c6719c?context%253Dexplore)
+[Última imagen de Docker desplegada con el workflow nocturno](https://hub.docker.com/layers/pca06/books-reviewer/dev-20230702.011631/images/sha256-540edb20e80e61b48f4cc5c78ca26f1faf5409a5351d4e0e4c1ceba2e0c6719c?context%253Drepo)
 
-[Último workflow nocturno ejecutado durante la realización de esta memoria](https://github.com/Campaa02/ais-da.barbera.2020-p.campanero.2020-2023-tbd/actions/runs/5432802390) (ejecutado manualmente, se espera que durante la revisión de la memoria haya varios)
+[Último workflow nocturno ejecutado durante la realización de esta memoria](https://github.com/Campaa02/ais-da.barbera.2020-p.campanero.2020-2023-tbd/actions/runs/5433988997)
 
 [Última imagen de Docker del despliegue a Okteto](https://hub.docker.com/layers/pca06/books-reviewer/aa63182684f6bbb7b654e79a66d2b32c2cdac37d/images/sha256-540edb20e80e61b48f4cc5c78ca26f1faf5409a5351d4e0e4c1ceba2e0c6719c?context%253Dexplore)
 
